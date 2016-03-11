@@ -1,4 +1,5 @@
 package graph;
+
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -9,20 +10,44 @@ public class Graph{
 	private int[][] graph;
 	private final Node[] nodes;
 
+	/**
+	 * Basic graph constructor.  No edges will exist.
+	 * @param size
+	 */
 	public Graph(int size){
 		n = size;
 		graph = new int[n][n];
 		nodes = new Node[n];
-		for(int i=0; i<n; i++)
+		for (int i = 0; i < n; i++)
 			nodes[i] = new Node(i, this);
 	}
 
+	/**
+	 * Copy constructor
+	 * @param toClone
+	 */
 	public Graph(Graph toClone){
 		this(toClone.n);
 		//copy edge data
 		for (int i = 0; i < n; i++)
 			for (int j = 0; j < n; j++)
 				graph[i][j] = toClone.graph[i][j];
+	}
+
+	/**
+	 * @param g1
+	 * @param g2
+	 * @return Graph that contains an edge E iff the edge E exists in both g1 and in g2
+	 */
+	public static Graph intersect(Graph g1, Graph g2){
+		if (g1.n != g2.n)
+			throw new RuntimeException("Graphs must have the same number of nodes!");
+
+		Graph ret = new Graph(g1.n);
+		for (int i = 0; i < ret.n; i++)
+			for (int j = 0; j < ret.n; j++)
+				ret.graph[i][j] = g1.graph[i][j] == 1 && g2.graph[i][j] == 1 ? 1 : 0;
+		return ret;
 	}
 
 	/**
@@ -36,7 +61,7 @@ public class Graph{
 		graph[a][b] = graph[b][a] = 1;
 		return ret;
 	}
-	
+
 	/**
 	 * add an edge to the graph
 	 * @param a
@@ -58,6 +83,7 @@ public class Graph{
 		graph[a][b] = graph[b][a] = 0;
 		return ret;
 	}
+
 	/**
 	 * remove an edge from the graph
 	 * @param a
@@ -76,7 +102,7 @@ public class Graph{
 	public boolean isEdge(int a, int b){
 		return graph[a][b] == 1;
 	}
-	
+
 	/**
 	 * @param a
 	 * @param b
@@ -111,18 +137,18 @@ public class Graph{
 				ret.add(nodes[i]);
 		return ret;
 	}
-	
+
 	public SortedSet<Node> adjacentNodes(Node node){
 		return adjacentNodes(node.id);
 	}
-	
+
 	/**
 	 * @param nodeSet a set of nodes
 	 * @return all nodes which are adjacent to this set NOT INCLUDING any nodes that are in the input set
 	 */
 	public SortedSet<Node> adjacentNodes(Set<Node> nodeSet){
 		SortedSet<Node> ret = new TreeSet<Node>();
-		for (Node node: nodeSet)
+		for (Node node : nodeSet)
 			ret.addAll(adjacentNodes(node));
 		ret.removeAll(nodeSet);
 		return ret;
@@ -141,7 +167,7 @@ public class Graph{
 				ret.add(nodes[i]);
 		return ret;
 	}
-	
+
 	/**
 	 * @param nodeSet1 set of nodes
 	 * @param nodeSet2 set of nodes
@@ -149,7 +175,7 @@ public class Graph{
 	 */
 	public int numEdgesBetween(Set<Node> nodeSet1, Set<Node> nodeSet2){
 		Set<Node> linked = new TreeSet<Node>();
-		for (Node node: nodeSet1)
+		for (Node node : nodeSet1)
 			linked.addAll(adjacentNodes(node));
 		linked.retainAll(nodeSet2);
 		return linked.size();

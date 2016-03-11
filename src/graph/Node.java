@@ -18,5 +18,9 @@ public class Node implements Comparable<Node>{
 	public int compareTo(Node other){
 		return Integer.compare(id, other.id);
 	}
+	
+	public String toString(){
+		return "n"+id;
+	}
 
 }
