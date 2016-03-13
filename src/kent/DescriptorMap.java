@@ -27,6 +27,17 @@ public class DescriptorMap{
 		set.add(node);
 	}
 
+	public String getDescriptor(Node n){
+		for (Entry<String, SortedSet<Node>> entry : mapping.entrySet())
+			if (entry.getValue().contains(n))
+				return entry.getKey();
+		throw new RuntimeException("Node " + n + " not found!");
+	}
+	
+	public Set<Node> getNodeSet(String desc){
+		return mapping.get(desc);
+	}
+
 	public int getDescriptorIndex(Node n){
 		int ctr = 0;
 		for (Entry<String, SortedSet<Node>> entry : mapping.entrySet()){
@@ -37,24 +48,36 @@ public class DescriptorMap{
 		throw new RuntimeException("Node " + n + " not found!");
 	}
 
+	public int numSets(){
+		return mapping.size();
+	}
+
 	public String getMapString(Set<Node> nodes){
 		String ret = "";
+		boolean first = true;
 		Set<Node> tmp = new TreeSet<Node>();
 		int ctr = 0;
 		for (Entry<String, SortedSet<Node>> entry : mapping.entrySet()){
 			tmp.addAll(entry.getValue());
 			tmp.retainAll(nodes);
 			if (!tmp.isEmpty()) {
-				ret += ""+tmp.size() + "\u2208" + ctr + ",";
+				ret += (first ? "" : ",") + tmp.size() + "\u2208" + ctr;
+				first = false;
 			}
 			tmp.clear();
 			ctr++;
 		}
 		return ret;
 	}
-	
+
 	public String toString(){
-		return mapping.values().toString();
+		String ret = "";
+		boolean first = true;
+		for (Entry<String, SortedSet<Node>> entry : mapping.entrySet()){
+			ret += (first ? "" : "\n") + entry.getKey() + " -> " + entry.getValue();
+			first = false;
+		}
+		return ret;
 	}
 
 }

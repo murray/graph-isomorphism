@@ -51,6 +51,42 @@ public class Graph{
 	}
 
 	/**
+	 * generate a random graph, with the given probability than any given edge exists
+	 * @param probablilty
+	 */
+	public void randomize(double probability){
+		//generate random links
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < i; j++)
+				if (Math.random() < probability)
+					addEdge(i, j);
+				else
+					removeEdge(i, j);
+	}
+
+	/**
+	 * randomly swap the nodes of this graph
+	 */
+	public void randomSwap(){
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < n; j++)
+				if (Math.random() < 0.5)
+					swapNodes((int) (n * Math.random()), (int) (n * Math.random()));
+	}
+
+	/**
+	 * set this graph so that any edge exists iff the edge did not exist before
+	 */
+	public void invert(){
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < i; j++)
+				if (isEdge(i, j))
+					removeEdge(i, j);
+				else
+					addEdge(i, j);
+	}
+
+	/**
 	 * add an edge to the graph
 	 * @param a
 	 * @param b
@@ -189,11 +225,12 @@ public class Graph{
 	 * @param b node in the graph
 	 */
 	public void swapNodes(int a, int b){
-		for (int i = 0; i < n; i++){
-			int tmp = graph[a][i];
-			graph[i][a] = graph[a][i] = graph[b][i];
-			graph[i][b] = graph[b][i] = tmp;
-		}
+		for (int i = 0; i < n; i++)
+			if (i != a && i != b) {
+				int tmp = graph[i][a];
+				graph[i][a] = graph[a][i] = graph[i][b];
+				graph[i][b] = graph[b][i] = tmp;
+			}
 	}
 
 	@Override

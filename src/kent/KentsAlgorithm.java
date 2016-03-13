@@ -7,36 +7,83 @@ import graph.Graph;
 import graph.Node;
 import graph.StaticGraph;
 
+/**
+ * polynomial-time
+ * @author Kent
+ */
 public class KentsAlgorithm{
 
 	public static void main(String[] args){
-		Graph g = new Graph(4);
+		Graph g = new Graph(20);
 		g.addEdge(0, 1);
 		g.addEdge(1, 2);
 		g.addEdge(2, 3);
+		g.addEdge(3, 4);
+		g.addEdge(4, 5);
+		g.addEdge(5, 0);
+
+		//		g.addEdge(0, 3);
+		//		g.addEdge(1, 4);
 		g.addEdge(0, 2);
 
-		System.out.println(g);
+		for (int i = 0; i < 6; i++){
+			g.addEdge(i, 6);
+			g.addEdge(i, 7);
+		}
 
-		generateDescriptorStrings(new StaticGraph(g));
+		Visualizer.startVisualizer(g);
+		while (true){
+			putInCircle(g.allNodes(), g);
+			
+			pause(300);
+			
+			g.randomize(Math.random()/2);
+			
+			for (Node n : g.allNodes())
+				Visualizer.setNodeColor(n, 0);
+			
+			System.out.println(g);
+			generateDescriptorStrings(new StaticGraph(g));
+
+			System.out.println("///////////////////////////////");
+			System.out.println("//          done!!!          //");
+			System.out.println("///////////////////////////////");
+			pause(2000);
+		}
+
 	}
 
-	static void generateDescriptorStrings(StaticGraph graph){
-		DescriptorMap descMap = new DescriptorMap(graph);
+	static DescriptorMap generateDescriptorStrings(StaticGraph graph){
+		Visualizer.SPEED=200;
 		
-		for (int layer = 0; layer < graph.n; layer++){
-			System.out.println("----------");
+		DescriptorMap descMap = new DescriptorMap(graph);
+		int itterations = 0;
+
+		int size = graph.n;
+		while (size != descMap.numSets() && graph.n != descMap.numSets()){
+			size = descMap.numSets();
+			itterations++;
+			//System.out.println("----------");
 			DescriptorMap nextMap = new DescriptorMap();
 			for (Node node : graph.allNodes()){
-				System.out.println("-----");
 				Set<Node> completedSet = new TreeSet<Node>();
 
 				String desc = "";
 				completedSet.add(node);
 				Set<Node> adjacentNodes = node.adjacentNodes();
 
+				pause(Visualizer.SPEED);
+
+				Visualizer.setNodePos(node, 400, 50);
+				int layer = 0;
 				while (!adjacentNodes.isEmpty()){
+					layer++;
 					desc += "{" + descMap.getMapString(adjacentNodes) + "}";
+
+					int ctr = 0;
+					for (Node n : adjacentNodes){
+						Visualizer.setNodePos(n, ctr++ * 30 + 400 - adjacentNodes.size() * 15 + 15, layer * 100 + 50);
+					}
 
 					completedSet.addAll(adjacentNodes);
 					adjacentNodes = graph.adjacentNodes(completedSet);
@@ -44,12 +91,34 @@ public class KentsAlgorithm{
 						desc += "-";
 					}
 				}
-				System.out.println(desc);
+				Set<Node> disconnected = graph.allNodes();
+				disconnected.removeAll(completedSet);
+				putInCircle(disconnected, graph);
 				nextMap.add(node, desc);
-				System.out.println(nextMap.toString());
+				System.out.println('"'+desc +"\" -> "+nextMap.getNodeSet(desc)+" (added "+node+")");
 			}
-			System.out.println(nextMap.toString());
+			Visualizer.SPEED = 1000;
+			System.out.println("-----");
 			descMap = nextMap;
+			for (Node n : graph.allNodes())
+				Visualizer.setNodeColor(n, descMap.getDescriptorIndex(n)/(float)graph.n);
+		}
+		System.out.println("itterations: " + itterations);
+		System.out.println(descMap);
+		return descMap;
+	}
+
+	private static void putInCircle(Set<Node> nodes, Graph g){
+		for (Node n : nodes){
+			double angle = n.nodeId() * Math.PI * 2 / g.n;
+			Visualizer.setNodePos(n, 100 + (int) (Math.cos(angle) * 100), 300 - (int) (Math.sin(angle) * 100));
+		}
+	}
+
+	private static void pause(long time){
+		try{
+			Thread.sleep(time);
+		}catch (InterruptedException e){
 		}
 	}
 

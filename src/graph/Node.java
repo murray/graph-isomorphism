@@ -1,4 +1,5 @@
 package graph;
+
 import java.util.SortedSet;
 
 public class Node implements Comparable<Node>{
@@ -10,6 +11,10 @@ public class Node implements Comparable<Node>{
 		this.graph = graph;
 	}
 
+	public int nodeId(){
+		return id;
+	}
+
 	public SortedSet<Node> adjacentNodes(){
 		return graph.adjacentNodes(id);
 	}
@@ -18,9 +23,9 @@ public class Node implements Comparable<Node>{
 	public int compareTo(Node other){
 		return Integer.compare(id, other.id);
 	}
-	
+
 	public String toString(){
-		return "n"+id;
+		return "n" + id;
 	}
 
 }
