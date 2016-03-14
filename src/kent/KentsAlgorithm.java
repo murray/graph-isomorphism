@@ -14,7 +14,7 @@ import graph.StaticGraph;
 public class KentsAlgorithm{
 
 	public static void main(String[] args){
-		Graph g = new Graph(20);
+		Graph g = new Graph(8);
 		g.addEdge(0, 1);
 		g.addEdge(1, 2);
 		g.addEdge(2, 3);
@@ -30,14 +30,16 @@ public class KentsAlgorithm{
 			g.addEdge(i, 6);
 			g.addEdge(i, 7);
 		}
+		
+		g.removeEdge(0, 6);
+		g.removeEdge(2, 7);
 
 		Visualizer.startVisualizer(g);
 		while (true){
 			putInCircle(g.allNodes(), g);
-			
 			pause(300);
 			
-			g.randomize(Math.random()/2);
+			//g.randomize(Math.random()/2);
 			
 			for (Node n : g.allNodes())
 				Visualizer.setNodeColor(n, 0);
@@ -48,7 +50,8 @@ public class KentsAlgorithm{
 			System.out.println("///////////////////////////////");
 			System.out.println("//          done!!!          //");
 			System.out.println("///////////////////////////////");
-			pause(2000);
+			putInCircle(g.allNodes(), g);
+			pause(20000);
 		}
 
 	}
@@ -101,7 +104,7 @@ public class KentsAlgorithm{
 			System.out.println("-----");
 			descMap = nextMap;
 			for (Node n : graph.allNodes())
-				Visualizer.setNodeColor(n, descMap.getDescriptorIndex(n)/(float)graph.n);
+				Visualizer.setNodeColor(n, descMap.getDescriptorIndex(n)/(float)descMap.numSets());
 		}
 		System.out.println("itterations: " + itterations);
 		System.out.println(descMap);

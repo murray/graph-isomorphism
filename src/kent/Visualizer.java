@@ -115,7 +115,7 @@ public class Visualizer{
 			
 			int ctr = 0;
 			for (Point2D.Float p : nodes){
-				g.setColor(Color.getHSBColor(((nodeColors.get(ctr) + 0.5f) % 1)*3.14159f, 0.5f, 1));
+				g.setColor(Color.getHSBColor(nodeColors.get(ctr) + 0.6f, 0.5f, 1));
 				g.fillArc(Math.round(p.x) - 10, Math.round(p.y) - 10, 20, 20, 0, 360);
 				g.setColor(Color.BLACK);
 				g.drawArc(Math.round(p.x) - 10, Math.round(p.y) - 10, 20, 20, 0, 360);
