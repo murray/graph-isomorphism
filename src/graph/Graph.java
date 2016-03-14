@@ -210,11 +210,24 @@ public class Graph{
 	 * @return number of edges which go between the sets
 	 */
 	public int numEdgesBetween(Set<Node> nodeSet1, Set<Node> nodeSet2){
+		int num = 0;
+		for (Node node1 : nodeSet1)
+			for (Node node2 : nodeSet2)
+				if (isEdge(node1, node2))
+					num++;
+		return num;
+	}
+
+	/**
+	 * @param nodeSet set of nodes
+	 * @return number of edges which go between the nodes
+	 */
+	public int numEdgesBetween(Set<Node> nodeSet){
 		Set<Node> linked = new TreeSet<Node>();
-		for (Node node : nodeSet1)
+		for (Node node : nodeSet)
 			linked.addAll(adjacentNodes(node));
-		linked.retainAll(nodeSet2);
-		return linked.size();
+		linked.retainAll(nodeSet);
+		return linked.size() / 2;
 	}
 
 	/**

@@ -20,19 +20,32 @@ public class KentsAlgorithm{
 		g.addEdge(2, 3);
 		g.addEdge(3, 4);
 		g.addEdge(4, 5);
-		g.addEdge(5, 0);
-
-		//		g.addEdge(0, 3);
-		//		g.addEdge(1, 4);
-		g.addEdge(0, 2);
-
-		for (int i = 0; i < 6; i++){
-			g.addEdge(i, 6);
-			g.addEdge(i, 7);
-		}
+		g.addEdge(5, 6);
+		g.addEdge(6, 7);
+		g.addEdge(7, 0);
+		g.addEdge(1, 6);
+		g.addEdge(2, 5);
 		
-		g.removeEdge(0, 6);
-		g.removeEdge(2, 7);
+		g.addEdge(0, 6);
+		g.addEdge(6, 2);
+		g.addEdge(2, 4);
+		
+		g.addEdge(7, 5);
+		g.addEdge(5, 1);
+		g.addEdge(1, 3);
+		
+		g.invert();
+		
+		
+		
+
+//		for (int i = 0; i < 6; i++){
+//			g.addEdge(i, 6);
+//			g.addEdge(i, 7);
+//		}
+//		
+//		g.removeEdge(0, 6);
+//		g.removeEdge(2, 7);
 
 		Visualizer.startVisualizer(g);
 		while (true){
@@ -82,6 +95,7 @@ public class KentsAlgorithm{
 				while (!adjacentNodes.isEmpty()){
 					layer++;
 					desc += "{" + descMap.getMapString(adjacentNodes) + "}";
+					desc+="["+graph.numEdgesBetween(adjacentNodes)+"]";
 
 					int ctr = 0;
 					for (Node n : adjacentNodes){

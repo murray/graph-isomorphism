@@ -68,8 +68,7 @@ public class Visualizer{
 
 	public static void setNodeColor(Node node, float color){
 		setNumNodes(node.nodeId() + 1);
-		nodeColors.remove(node.nodeId());
-		nodeColors.add(node.nodeId(), color);
+		nodeColors.set(node.nodeId(), color);
 	}
 
 	private static class MyPanel extends JPanel implements ActionListener{
