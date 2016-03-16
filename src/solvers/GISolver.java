@@ -1,3 +1,4 @@
+package solvers;
 import graph.Graph;
 
 public interface GISolver {

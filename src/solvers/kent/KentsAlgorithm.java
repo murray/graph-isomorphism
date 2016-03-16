@@ -1,4 +1,4 @@
-package kent;
+package solvers.kent;
 
 import java.util.Set;
 import java.util.TreeSet;

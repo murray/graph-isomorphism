@@ -1,4 +1,4 @@
-package kent;
+package solvers.kent;
 
 import java.util.Map;
 import java.util.Map.Entry;
