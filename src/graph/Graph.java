@@ -262,4 +262,31 @@ public class Graph{
 		}
 		return sb.toString();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Graph)) {
+			return false;
+		}
+		
+		if(obj == this) {
+			return true;
+		}
+		
+		Graph other = (Graph) obj;
+		
+		if(this.n != other.n) {
+			return false;
+		}
+		
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<n; j++) {
+				if(this.graph[i][j] != other.graph[i][j]) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
 }
