@@ -6,57 +6,39 @@ import java.util.TreeSet;
 import graph.Graph;
 import graph.Node;
 import graph.StaticGraph;
+import solvers.GISolver;
 
 /**
  * polynomial-time
  * @author Kent
  */
-public class KentsAlgorithm{
+public class KentsAlgorithm implements GISolver{
+
+	private static boolean draw = false;
 
 	public static void main(String[] args){
-		Graph g = new Graph(8);
+		draw = true;
+		Graph g = new Graph(4);
 		g.addEdge(0, 1);
 		g.addEdge(1, 2);
 		g.addEdge(2, 3);
-		g.addEdge(3, 4);
-		g.addEdge(4, 5);
-		g.addEdge(5, 6);
-		g.addEdge(6, 7);
-		g.addEdge(7, 0);
-		g.addEdge(1, 6);
-		g.addEdge(2, 5);
-		
-		g.addEdge(0, 6);
-		g.addEdge(6, 2);
-		g.addEdge(2, 4);
-		
-		g.addEdge(7, 5);
-		g.addEdge(5, 1);
-		g.addEdge(1, 3);
-		
-		g.invert();
-		
-		
-		
+		g.addEdge(3, 0);
+		g.addEdge(0, 2);
 
-//		for (int i = 0; i < 6; i++){
-//			g.addEdge(i, 6);
-//			g.addEdge(i, 7);
-//		}
-//		
-//		g.removeEdge(0, 6);
-//		g.removeEdge(2, 7);
+		//		draw = false;
+		//		System.out.println(new KentsAlgorithm().isIsomorphism(new StaticGraph(g), new StaticGraph(g.randomSwap())));
+		//		draw = true;
 
 		Visualizer.startVisualizer(g);
 		while (true){
 			putInCircle(g.allNodes(), g);
 			pause(300);
-			
+
 			//g.randomize(Math.random()/2);
-			
+
 			for (Node n : g.allNodes())
 				Visualizer.setNodeColor(n, 0);
-			
+
 			System.out.println(g);
 			generateDescriptorStrings(new StaticGraph(g));
 
@@ -64,14 +46,21 @@ public class KentsAlgorithm{
 			System.out.println("//          done!!!          //");
 			System.out.println("///////////////////////////////");
 			putInCircle(g.allNodes(), g);
-			pause(20000);
+			pause(2000000);
 		}
 
 	}
 
+	@Override
+	public boolean isIsomorphism(StaticGraph g1, StaticGraph g2){
+		DescriptorMap descMap1 = generateDescriptorStrings(g1);
+		DescriptorMap descMap2 = generateDescriptorStrings(g2);
+		return descMap1.equals(descMap2);
+	}
+
 	static DescriptorMap generateDescriptorStrings(StaticGraph graph){
-		Visualizer.SPEED=200;
-		
+		Visualizer.SPEED = 200;
+
 		DescriptorMap descMap = new DescriptorMap(graph);
 		int itterations = 0;
 
@@ -94,8 +83,9 @@ public class KentsAlgorithm{
 				int layer = 0;
 				while (!adjacentNodes.isEmpty()){
 					layer++;
-					desc += "{" + descMap.getMapString(adjacentNodes) + "}";
-					desc+="["+graph.numEdgesBetween(adjacentNodes)+"]";
+					desc += "[" + descMap.getMapEdgeString(completedSet, adjacentNodes) + "]";
+					desc += "{" + descMap.getMapNodeString(adjacentNodes) + "}";
+					desc += "[" + descMap.getMapEdgeString(adjacentNodes) + "]";
 
 					int ctr = 0;
 					for (Node n : adjacentNodes){
@@ -112,13 +102,13 @@ public class KentsAlgorithm{
 				disconnected.removeAll(completedSet);
 				putInCircle(disconnected, graph);
 				nextMap.add(node, desc);
-				System.out.println('"'+desc +"\" -> "+nextMap.getNodeSet(desc)+" (added "+node+")");
+				System.out.println('"' + desc + "\" -> " + nextMap.getNodeSet(desc) + " (added " + node + ")");
 			}
 			Visualizer.SPEED = 1000;
 			System.out.println("-----");
 			descMap = nextMap;
 			for (Node n : graph.allNodes())
-				Visualizer.setNodeColor(n, descMap.getDescriptorIndex(n)/(float)descMap.numSets());
+				Visualizer.setNodeColor(n, descMap.getDescriptorIndex(n) / (float) descMap.numSets());
 		}
 		System.out.println("itterations: " + itterations);
 		System.out.println(descMap);
@@ -133,10 +123,11 @@ public class KentsAlgorithm{
 	}
 
 	private static void pause(long time){
-		try{
-			Thread.sleep(time);
-		}catch (InterruptedException e){
-		}
+		if (draw)
+			try{
+				Thread.sleep(time);
+			}catch (InterruptedException e){
+			}
 	}
 
 }

@@ -54,7 +54,7 @@ public class Graph{
 	 * generate a random graph, with the given probability than any given edge exists
 	 * @param probablilty
 	 */
-	public void randomize(double probability){
+	public Graph randomize(double probability){
 		//generate random links
 		for (int i = 0; i < n; i++)
 			for (int j = 0; j < i; j++)
@@ -62,28 +62,31 @@ public class Graph{
 					addEdge(i, j);
 				else
 					removeEdge(i, j);
+		return this;
 	}
 
 	/**
 	 * randomly swap the nodes of this graph
 	 */
-	public void randomSwap(){
+	public Graph randomSwap(){
 		for (int i = 0; i < n; i++)
 			for (int j = 0; j < n; j++)
 				if (Math.random() < 0.5)
 					swapNodes((int) (n * Math.random()), (int) (n * Math.random()));
+		return this;
 	}
 
 	/**
 	 * set this graph so that any edge exists iff the edge did not exist before
 	 */
-	public void invert(){
+	public Graph invert(){
 		for (int i = 0; i < n; i++)
 			for (int j = 0; j < i; j++)
 				if (isEdge(i, j))
 					removeEdge(i, j);
 				else
 					addEdge(i, j);
+		return this;
 	}
 
 	/**

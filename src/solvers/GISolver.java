@@ -1,6 +1,6 @@
 package solvers;
-import graph.Graph;
+import graph.StaticGraph;
 
 public interface GISolver {
-	public boolean isIsomorphism(Graph g1, Graph g2);
+	public boolean isIsomorphism(StaticGraph g1, StaticGraph g2);
 }

@@ -15,6 +15,10 @@ public class Node implements Comparable<Node>{
 		return id;
 	}
 
+	public boolean isEdge(Node other){
+		return graph.isEdge(this, other);
+	}
+
 	public SortedSet<Node> adjacentNodes(){
 		return graph.adjacentNodes(id);
 	}

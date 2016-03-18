@@ -1,5 +1,6 @@
 package solvers.kent;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class DescriptorMap{
 				return entry.getKey();
 		throw new RuntimeException("Node " + n + " not found!");
 	}
-	
+
 	public Set<Node> getNodeSet(String desc){
 		return mapping.get(desc);
 	}
@@ -52,7 +53,7 @@ public class DescriptorMap{
 		return mapping.size();
 	}
 
-	public String getMapString(Set<Node> nodes){
+	public String getMapNodeString(Set<Node> nodes){
 		String ret = "";
 		boolean first = true;
 		Set<Node> tmp = new TreeSet<Node>();
@@ -68,6 +69,63 @@ public class DescriptorMap{
 			ctr++;
 		}
 		return ret;
+	}
+
+	public String getMapEdgeString(Set<Node> nodes){
+		return getMapEdgeString(nodes, nodes);
+	}
+
+	public String getMapEdgeString(Set<Node> nodeSet1, Set<Node> nodeSet2){
+		String ret = "";
+		boolean first = true;
+		int ctr1 = 0;
+		for (SortedSet<Node> entry1 : mapping.values()){
+			int ctr2 = 0;
+			for (SortedSet<Node> entry2 : mapping.values()){
+				if (ctr1 <= ctr2) {
+					int count = 0;
+					for (Node node1 : entry1)
+						if (nodeSet1.contains(node1))
+							for (Node node2 : entry2)
+								if (nodeSet2.contains(node2))
+									if (ctr1 != ctr2 || nodeSet1 != nodeSet2 || node1.nodeId() < node2.nodeId())
+										if (node1.isEdge(node2))
+											count++;
+					if (count > 0) {
+						ret += (first ? "" : ",") + count + "\u2208" + ctr1 + "-" + ctr2;
+						first = false;
+					}
+				}
+				ctr2++;
+			}
+			ctr1++;
+		}
+		return ret;
+	}
+
+	@Override
+	public boolean equals(Object other){
+		if (!(other instanceof DescriptorMap))
+			return super.equals(other);
+
+		DescriptorMap descMap = (DescriptorMap) other;
+		if (mapping.size() != descMap.mapping.size())
+			return false;
+
+		Iterator<Entry<String, SortedSet<Node>>> iter = mapping.entrySet().iterator();
+		Iterator<Entry<String, SortedSet<Node>>> otherIter = descMap.mapping.entrySet().iterator();
+
+		while (iter.hasNext()){
+			Entry<String, SortedSet<Node>> entry = iter.next();
+			Entry<String, SortedSet<Node>> otherEntry = otherIter.next();
+
+			if (!entry.getKey().equals(otherEntry.getKey()))
+				return false;
+
+			if (entry.getValue().size() != otherEntry.getValue().size())
+				return false;
+		}
+		return true;
 	}
 
 	public String toString(){
