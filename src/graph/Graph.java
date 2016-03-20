@@ -34,6 +34,16 @@ public class Graph{
 				graph[i][j] = toClone.graph[i][j];
 	}
 
+	public Graph(int[][] graph) {
+		this.graph = graph;
+		this.n = graph.length;
+		this.nodes = new Node[n];
+		
+		for (int i=0; i<n; i++) {
+			nodes[i] = new Node(i, this);
+		}
+	}
+
 	/**
 	 * @param g1
 	 * @param g2
@@ -239,7 +249,7 @@ public class Graph{
 	 * 
 	 * @param permutation
 	 */
-	public void permute(int[] permutation) {
+	public Graph permute(int[] permutation) {
 		if(permutation.length != n) {
 			throw new IllegalArgumentException("The number of permutations does not match the number of nodes.");
 		}
@@ -258,7 +268,7 @@ public class Graph{
 			}
 		}
 		
-		graph = permGraph;
+		return new Graph(permGraph);
 	}
 
 	/**
