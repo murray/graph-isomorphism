@@ -232,6 +232,34 @@ public class Graph{
 		linked.retainAll(nodeSet);
 		return linked.size() / 2;
 	}
+	
+	/**
+	 * Map nodes from the current graph to the positions specified in 'permutation'.
+	 * The result is an isomorphic graph.
+	 * 
+	 * @param permutation
+	 */
+	public void permute(int[] permutation) {
+		if(permutation.length != n) {
+			throw new IllegalArgumentException("The number of permutations does not match the number of nodes.");
+		}
+		
+		int[][] permGraph = new int[n][n];
+		
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<i+1; j++) {
+				if(graph[i][j] == 1) {
+					int pi = permutation[i];
+					int pj = permutation[j];
+					
+					permGraph[pi][pj] = 1;
+					permGraph[pj][pi] = 1;
+				}
+			}
+		}
+		
+		graph = permGraph;
+	}
 
 	/**
 	 * Swap the specified nodes.
@@ -288,5 +316,28 @@ public class Graph{
 		}
 		
 		return true;
+	}
+	
+	public static void main(String[] args) {
+		// Testing
+		
+		// Permutations
+
+		Graph g = new Graph(5);
+		g.addEdge(0, 1);
+		g.addEdge(2, 4);
+		
+		assert g.isEdge(0, 1);
+		assert g.isEdge(1, 0);
+		assert g.isEdge(2, 4);
+		assert g.isEdge(4, 2);
+		
+		int[] permutation = {2,3,4,1,0};
+		g.permute(permutation);
+		
+		assert g.isEdge(2, 3);
+		assert g.isEdge(3, 2);
+		assert g.isEdge(3, 0);
+		assert g.isEdge(0, 3);
 	}
 }
