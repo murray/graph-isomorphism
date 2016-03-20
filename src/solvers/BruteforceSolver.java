@@ -30,7 +30,7 @@ public class BruteforceSolver implements GISolver{
 	 * @param perm
 	 * @return the next permutation sequence.
 	 */
-	private static int[] nextPermutation(int[] perm) {
+	private static void nextPermutation(int[] perm) {
 		boolean isLast = true;
 		
 		for(int i=perm.length-1; i>0; i--) {
@@ -59,8 +59,6 @@ public class BruteforceSolver implements GISolver{
 		if(isLast) {
 			ArrayUtils.reverse(perm);
 		}
-		
-		return perm;
 	}
 	
 	@Override
