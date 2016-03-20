@@ -336,6 +336,7 @@ public class Graph{
 		Graph g = new Graph(5);
 		g.addEdge(0, 1);
 		g.addEdge(2, 4);
+		System.out.println(g);
 		
 		assert g.isEdge(0, 1);
 		assert g.isEdge(1, 0);
@@ -343,11 +344,12 @@ public class Graph{
 		assert g.isEdge(4, 2);
 		
 		int[] permutation = {2,3,4,1,0};
-		g.permute(permutation);
+		g = g.permute(permutation);
+		System.out.println(g);
 		
 		assert g.isEdge(2, 3);
 		assert g.isEdge(3, 2);
-		assert g.isEdge(3, 0);
-		assert g.isEdge(0, 3);
+		assert g.isEdge(4, 0);
+		assert g.isEdge(0, 4);
 	}
 }
