@@ -118,5 +118,14 @@ public class BruteforceSolver implements GISolver{
 		StaticGraph sg2 = new StaticGraph(g2);
 		BruteforceSolver bfSolver = new BruteforceSolver();
 		assert bfSolver.isIsomorphism(sg1, sg2);
+		
+		if(g2.isEdge(2, 3)) {
+			g2.removeEdge(2, 3);
+		} else {
+			g2.addEdge(2, 3);
+		}
+		
+		sg2 = new StaticGraph(g2);
+		assert !bfSolver.isIsomorphism(sg1, sg2);
 	}
 }
