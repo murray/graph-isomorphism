@@ -9,6 +9,7 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,6 +29,9 @@ public class Visualizer{
 
 	public static void startVisualizer(Graph g){
 		graph = g;
+		texts=new ArrayList<String>(graph.n);
+		for (int i=0; i<g.n*2; i++)
+			texts.add(null);
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
 				createAndShowGUI();
@@ -43,6 +47,7 @@ public class Visualizer{
 		f.setVisible(true);
 	}
 
+	static List<String> texts;
 	static List<Point2D.Float> nodes = new LinkedList<Point2D.Float>();
 	static List<Point2D.Float> nodeDests = new LinkedList<Point2D.Float>();
 	static List<Point2D.Float> nodeFroms = new LinkedList<Point2D.Float>();
@@ -70,6 +75,15 @@ public class Visualizer{
 		setNumNodes(node.nodeId() + 1);
 		nodeColors.set(node.nodeId(), color);
 	}
+	
+	public static void resetText(){
+		for (int i=0; i<graph.n*2; i++)
+			texts.set(i, null);
+	}
+	
+	public static void setText(int level, String text){
+		texts.set(level, text);
+	}
 
 	private static class MyPanel extends JPanel implements ActionListener{
 
@@ -78,6 +92,7 @@ public class Visualizer{
 		Timer timer = new Timer(16, this);
 
 		public MyPanel(){
+			this.setBackground(Color.WHITE);
 			timer.start();
 		}
 
@@ -121,6 +136,10 @@ public class Visualizer{
 				g.drawString("" + (char) ('A' + ctr), p.x - 4, p.y + 5);
 				ctr++;
 			}
+			
+			for (int i=0; i<graph.n*2; i++)
+				if (texts.get(i)!=null)
+				g.drawString(""+texts.get(i), 500, i*50+50);
 		}
 
 	}

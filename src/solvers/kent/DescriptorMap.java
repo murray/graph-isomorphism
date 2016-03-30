@@ -85,14 +85,19 @@ public class DescriptorMap{
 				if (ctr1 <= ctr2) {
 					int count = 0;
 					for (Node node1 : entry1)
-						if (nodeSet1.contains(node1))
+						if (nodeSet1.contains(node1)) {
 							for (Node node2 : entry2)
 								if (nodeSet2.contains(node2))
-									if (ctr1 != ctr2 || nodeSet1 != nodeSet2 || node1.nodeId() < node2.nodeId())
 										if (node1.isEdge(node2))
 											count++;
+						}else if (nodeSet2.contains(node1)) {
+							for (Node node2 : entry2)
+								if (nodeSet1.contains(node2))
+										if (node1.isEdge(node2))
+											count++;
+						}
 					if (count > 0) {
-						ret += (first ? "" : ",") + count + "\u2208" + ctr1 + "-" + ctr2;
+						ret += (first ? "" : ",") + (ctr1==ctr2?count/2:count) + "\u2208" + ctr1 + "-" + ctr2;
 						first = false;
 					}
 				}

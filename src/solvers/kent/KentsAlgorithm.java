@@ -18,12 +18,14 @@ public class KentsAlgorithm implements GISolver{
 
 	public static void main(String[] args){
 		draw = true;
-		Graph g = new Graph(4);
+		Graph g = new Graph(5);
 		g.addEdge(0, 1);
 		g.addEdge(1, 2);
 		g.addEdge(2, 3);
-		g.addEdge(3, 0);
+		g.addEdge(3, 4);
+		g.addEdge(4, 0);
 		g.addEdge(0, 2);
+		g.addEdge(2, 4);
 
 		//		draw = false;
 		//		System.out.println(new KentsAlgorithm().isIsomorphism(new StaticGraph(g), new StaticGraph(g.randomSwap())));
@@ -46,7 +48,7 @@ public class KentsAlgorithm implements GISolver{
 			System.out.println("//          done!!!          //");
 			System.out.println("///////////////////////////////");
 			putInCircle(g.allNodes(), g);
-			pause(2000000);
+			pause(5000);
 		}
 
 	}
@@ -59,7 +61,7 @@ public class KentsAlgorithm implements GISolver{
 	}
 
 	static DescriptorMap generateDescriptorStrings(StaticGraph graph){
-		Visualizer.SPEED = 200;
+		Visualizer.SPEED = 1000;
 
 		DescriptorMap descMap = new DescriptorMap(graph);
 		int itterations = 0;
@@ -80,12 +82,21 @@ public class KentsAlgorithm implements GISolver{
 				pause(Visualizer.SPEED);
 
 				Visualizer.setNodePos(node, 400, 50);
+				Visualizer.resetText();
+
 				int layer = 0;
 				while (!adjacentNodes.isEmpty()){
 					layer++;
-					desc += "[" + descMap.getMapEdgeString(completedSet, adjacentNodes) + "]";
-					desc += "{" + descMap.getMapNodeString(adjacentNodes) + "}";
-					desc += "[" + descMap.getMapEdgeString(adjacentNodes) + "]";
+					
+					String descConnectLast = descMap.getMapEdgeString(completedSet, adjacentNodes);
+					
+					String descPart = "";
+					descPart += "{" + descMap.getMapNodeString(adjacentNodes) + "}";
+					descPart += "[" + descMap.getMapEdgeString(adjacentNodes) + "]";
+
+					Visualizer.setText(layer * 2 - 1, descConnectLast);
+					Visualizer.setText(layer * 2, descPart);
+					desc += "[" + descConnectLast + "]" + descPart;
 
 					int ctr = 0;
 					for (Node n : adjacentNodes){
@@ -104,6 +115,7 @@ public class KentsAlgorithm implements GISolver{
 				nextMap.add(node, desc);
 				System.out.println('"' + desc + "\" -> " + nextMap.getNodeSet(desc) + " (added " + node + ")");
 			}
+			pause(Visualizer.SPEED);
 			Visualizer.SPEED = 1000;
 			System.out.println("-----");
 			descMap = nextMap;
@@ -118,7 +130,8 @@ public class KentsAlgorithm implements GISolver{
 	private static void putInCircle(Set<Node> nodes, Graph g){
 		for (Node n : nodes){
 			double angle = n.nodeId() * Math.PI * 2 / g.n;
-			Visualizer.setNodePos(n, 100 + (int) (Math.cos(angle) * 100), 300 - (int) (Math.sin(angle) * 100));
+			Visualizer.resetText();
+			Visualizer.setNodePos(n, 120 + (int) (Math.cos(angle) * 100), 300 - (int) (Math.sin(angle) * 100));
 		}
 	}
 
