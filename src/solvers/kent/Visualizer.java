@@ -29,8 +29,8 @@ public class Visualizer{
 
 	public static void startVisualizer(Graph g){
 		graph = g;
-		texts=new ArrayList<String>(graph.n);
-		for (int i=0; i<g.n*2; i++)
+		texts = new ArrayList<String>(graph.n);
+		for (int i = 0; i < g.n * 2; i++)
 			texts.add(null);
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
@@ -75,14 +75,16 @@ public class Visualizer{
 		setNumNodes(node.nodeId() + 1);
 		nodeColors.set(node.nodeId(), color);
 	}
-	
+
 	public static void resetText(){
-		for (int i=0; i<graph.n*2; i++)
-			texts.set(i, null);
+		if (texts != null)
+			for (int i = 0; i < texts.size(); i++)
+				texts.set(i, null);
 	}
-	
+
 	public static void setText(int level, String text){
-		texts.set(level, text);
+		if (texts != null)
+			texts.set(level, text);
 	}
 
 	private static class MyPanel extends JPanel implements ActionListener{
@@ -102,7 +104,7 @@ public class Visualizer{
 
 		public void actionPerformed(ActionEvent ev){
 			if (ev.getSource() == timer) {
-				float difference = Math.min(1, (System.currentTimeMillis() - startTime) / (SPEED/2f));
+				float difference = Math.min(1, (System.currentTimeMillis() - startTime) / (SPEED / 2f));
 				difference = difference * difference * (3 - 2 * difference);
 				for (int i = 0; i < numNodes; i++){
 					nodes.get(i).x = nodeDests.get(i).x * difference + nodeFroms.get(i).x * (1 - difference);
@@ -117,7 +119,7 @@ public class Visualizer{
 			Graphics2D g = (Graphics2D) gg;
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g.setFont(new Font("default", Font.BOLD, 14));
-			
+
 			for (int i = 0; i < numNodes; i++){
 				Point2D.Float from = nodes.get(i);
 				for (int j = 0; j < i; j++)
@@ -126,7 +128,7 @@ public class Visualizer{
 						g.drawLine(Math.round(from.x), Math.round(from.y), Math.round(to.x), Math.round(to.y));
 					}
 			}
-			
+
 			int ctr = 0;
 			for (Point2D.Float p : nodes){
 				g.setColor(Color.getHSBColor(nodeColors.get(ctr) + 0.6f, 0.5f, 1));
@@ -136,10 +138,10 @@ public class Visualizer{
 				g.drawString("" + (char) ('A' + ctr), p.x - 4, p.y + 5);
 				ctr++;
 			}
-			
-			for (int i=0; i<graph.n*2; i++)
-				if (texts.get(i)!=null)
-				g.drawString(""+texts.get(i), 500, i*50+50);
+
+			for (int i = 0; i < graph.n * 2; i++)
+				if (texts.get(i) != null)
+					g.drawString("" + texts.get(i), 500, i * 50 + 50);
 		}
 
 	}
