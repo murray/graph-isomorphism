@@ -372,6 +372,8 @@ public class Graph{
 		g.addEdge(2, 4);
 		System.out.println(g);
 		
+		assert (g.numEdges() == 2);
+		
 		assert g.isEdge(0, 1);
 		assert g.isEdge(1, 0);
 		assert g.isEdge(2, 4);
