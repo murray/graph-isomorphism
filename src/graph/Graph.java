@@ -1,8 +1,12 @@
 package graph;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import org.apache.commons.lang.ArrayUtils;
 
 public class Graph{
 
@@ -269,6 +273,22 @@ public class Graph{
 		}
 		
 		return new Graph(permGraph);
+	}
+	
+	public Graph randomlyPermute() {
+		ArrayList<Integer> permutation = new ArrayList<Integer>(n);
+		for(int i=0; i<n; i++) {
+			permutation.add(i);
+		}
+		
+		Collections.shuffle(permutation);
+		
+		int[] perm_arr = new int[n];
+		for(int i=0; i<n; i++) {
+			perm_arr[i] = permutation.get(i);
+		}
+		
+		return permute(perm_arr);
 	}
 
 	/**
