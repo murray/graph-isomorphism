@@ -102,6 +102,20 @@ public class Graph{
 					addEdge(i, j);
 		return this;
 	}
+	
+	public int numEdges() {
+		int count = 0;
+		
+		for(int i=0; i<n; i++) {
+			for(int j=0; j<i+1; j++) {
+				if(graph[i][j] == 1) {
+					count++;
+				}
+			}
+		}
+		
+		return count;
+	}
 
 	/**
 	 * add an edge to the graph
