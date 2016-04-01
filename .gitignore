@@ -3,3 +3,5 @@
 .classpath
 /.settings/
 .metadata
+
+src/solvers/GISolver.java
