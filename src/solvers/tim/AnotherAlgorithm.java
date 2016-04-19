@@ -1,4 +1,4 @@
-package solver.tim;
+package solvers.tim;
 
 import graph.StaticGraph;
 import solvers.GISolver;
